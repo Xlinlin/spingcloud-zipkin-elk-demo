@@ -11,7 +11,7 @@
 
     <artifactId>zipkin-provider-a</artifactId>
     <properties>
-        <hutool.version>4.1.1</hutool.version>
+        <hutool.version>4.1.12</hutool.version>
         <lombok.version>1.16.18</lombok.version>
         <logstash.encoder.version>4.9</logstash.encoder.version>
         <logback.version>1.2.3</logback.version>
