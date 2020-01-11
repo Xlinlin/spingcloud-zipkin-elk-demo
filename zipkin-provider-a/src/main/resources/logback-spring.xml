@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <!-- 应用名称 -->
+    <springProperty scope="context" name="applicationName" source="spring.application.name"/>
+    <springProperty scope="context" name="ip" source="spring.cloud.client.ipAddress"/>
+    <property name="LOG_HOME" value="/data/logs/${applicationName}"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread, %X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 设置按尺寸和时间（同时满足）分割 -->
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- rollover daily -->
+            <fileNamePattern>
+                ${LOG_HOME}/${applicationName}.%d{yyyy-MM-dd}.%i.log
+            </fileNamePattern>
+            <!-- 10MB切割 -->
+            <maxFileSize>10MB</maxFileSize>
+            <!--日志文件保留天数 -->
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <jsonFactoryDecorator class="com.xiao.zipkin.common.logback.ConsumerLogDecorator"/>
+            <providers>
+                <timestamp>
+                    <timeZone>UTC</timeZone>
+                </timestamp>
+                <pattern>
+                    <pattern>
+                        {
+                        "pid": "${PID:-}",
+                        "ip": "${ip}",
+                        "service": "${applicationName:-}",
+                        "level": "%level",
+                        "trace": "%X{X-B3-TraceId:-}",
+                        "span": "%X{X-B3-SpanId:-}",
+                        "thread": "%thread",
+                        "class": "%logger{40}",
+                        "message": "%message",
+                        "stack_trace": "%exception{10}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

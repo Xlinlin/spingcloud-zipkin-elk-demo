@@ -1,0 +1,11 @@
+eureka:
+  instance:
+    hostname: localhost
+  server:
+    ## 关闭自我保护
+    enable-self-preservation: false
+    ## 间隔清理两秒
+    eviction-interval-timer-in-ms: 5000
+  client:
+    register-with-eureka: false
+    fetch-registry: false

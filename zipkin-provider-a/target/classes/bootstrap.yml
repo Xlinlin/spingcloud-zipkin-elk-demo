@@ -1,0 +1,9 @@
+server:
+  port: 8880
+spring:
+  application:
+    name: zipkin-provider-a
+  logging:
+    level:
+      org.springframework: WARN
+      org.hibernate: WARN
