@@ -19,34 +19,34 @@
         <rollingPolicy
                 class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- rollover daily -->
-            <fileNamePattern>
-                ${LOG_HOME}/${applicationName}.%d{yyyy-MM-dd}.%i.log
+            <fileNamePattern>${LOG_HOME}/${applicationName}.%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
-            <!-- 10MB切割 -->
             <maxFileSize>10MB</maxFileSize>
-            <!--日志文件保留天数 -->
-            <maxHistory>7</maxHistory>
+            <maxHistory>30</maxHistory>
             <totalSizeCap>500MB</totalSizeCap>
         </rollingPolicy>
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <jsonFactoryDecorator class="com.xiao.zipkin.common.logback.ConsumerLogDecorator"/>
             <providers>
+                <mdc/>
+                <threadName/>
+                <stackTrace/>
                 <timestamp>
                     <timeZone>UTC</timeZone>
                 </timestamp>
                 <pattern>
                     <pattern>
                         {
-                        "pid": "${PID:-}",
-                        "ip": "${ip}",
-                        "service": "${applicationName:-}",
-                        "level": "%level",
-                        "trace": "%X{X-B3-TraceId:-}",
-                        "span": "%X{X-B3-SpanId:-}",
-                        "thread": "%thread",
-                        "class": "%logger{40}",
-                        "message": "%message",
-                        "stack_trace": "%exception{10}"
+                        <!--                        "ip": "${ip}",-->
+                        <!--                        "time": "%d",-->
+                        <!--                        "level": "%level",-->
+                        <!--                        "thread": "%thread",-->
+                        <!--                        "class": "%logger{40}",-->
+                        "message": "%message"
+                        <!--                        "service": "${applicationName:-}",-->
+                        <!--                        "trace" : "%X{X-B3-TraceId:-}",-->
+                        <!--                        "span" : "%X{X-B3-SpanId:-}",-->
+                        <!--                        "stack_trace": "%exception{10}"-->
                         }
                     </pattern>
                 </pattern>
@@ -54,9 +54,12 @@
         </encoder>
     </appender>
 
+    <logger name="com.xiao.zipkin.common.zipkin.custom" level="info" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
     <root level="info">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>

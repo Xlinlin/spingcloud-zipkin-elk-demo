@@ -37,16 +37,16 @@
                 <pattern>
                     <pattern>
                         {
-                        "ip": "${ip}",
-                        "time": "%d",
-                        "level": "%level",
-                        "thread": "%thread",
-                        "class": "%logger{40}",
-                        "message": "%message",
-                        "service": "${applicationName:-}",
-                        "trace" : "%X{X-B3-TraceId:-}",
-                        "span" : "%X{X-B3-SpanId:-}",
-                        "stack_trace": "%exception{10}"
+                        <!--                        "ip": "${ip}",-->
+                        <!--                        "time": "%d",-->
+                        <!--                        "level": "%level",-->
+                        <!--                        "thread": "%thread",-->
+                        <!--                        "class": "%logger{40}",-->
+                        "message": "%message"
+                        <!--                        "service": "${applicationName:-}",-->
+                        <!--                        "trace" : "%X{X-B3-TraceId:-}",-->
+                        <!--                        "span" : "%X{X-B3-SpanId:-}",-->
+                        <!--                        "stack_trace": "%exception{10}"-->
                         }
                     </pattern>
                 </pattern>
@@ -54,9 +54,12 @@
         </encoder>
     </appender>
 
+    <logger name="com.xiao.zipkin.common.zipkin.custom" level="info" additivity="false">
+        <appender-ref ref="FILE"/>
+    </logger>
+
     <root level="info">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="FILE"/>
     </root>
 
 </configuration>
