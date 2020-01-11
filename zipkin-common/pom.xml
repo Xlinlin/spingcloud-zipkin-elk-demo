@@ -13,7 +13,7 @@
     <artifactId>zipkin-common</artifactId>
 
     <properties>
-        <hutool.version>4.1.1</hutool.version>
+        <hutool.version>4.1.12</hutool.version>
         <lombok.version>1.16.18</lombok.version>
     </properties>
 
