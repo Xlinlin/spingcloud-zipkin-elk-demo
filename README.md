@@ -26,7 +26,7 @@
    
 5. 更多参考资料：<br>
   [构建sleuth+zipkin全链路监控系统](https://blog.csdn.net/u012394095/category_9279645.html)<br>
-  [sleuth+zipkin+kafka+logstash链路追踪二次开发方案](https://blog.csdn.net/u012394095/article/details/94389644)
-  [分布式链路追踪技术对比](https://blog.csdn.net/u012394095/article/details/79700200)
+  [sleuth+zipkin+kafka+logstash链路追踪二次开发方案](https://blog.csdn.net/u012394095/article/details/94389644)<br>
+  [分布式链路追踪技术对比](https://blog.csdn.net/u012394095/article/details/79700200)<br>
   
 6. [Github地址](https://github.com/Xlinlin/spingcloud-zipkin-elk-demo)
