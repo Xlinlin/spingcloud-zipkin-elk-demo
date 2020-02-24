@@ -41,13 +41,16 @@ public class ZipkinCustomAutoConfiguration
 {
     @Autowired(required = false)
     private CustomSpanSender customSpanSender;
+    
+    @Value("${spring.zipkin.custom.skip-pattern:/api/message.*|/api/server/getbytopic}")
+    private String skipPattern;
 
     @Bean
     @ConditionalOnMissingBean
     public ZipkinSpanReporter slf4jReporter(SpanMetricReporter spanMetricReporter, ZipkinProperties zipkin)
     {
         log.info(">>>初始化zipKin-feign-slf4j-reporter");
-        return new CustomZipkinSpanReporter(zipkin.getFlushInterval(), spanMetricReporter, customSpanSender);
+        return new CustomZipkinSpanReporter(zipkin.getFlushInterval(), spanMetricReporter, customSpanSender,skipPattern);
     }
 
     @Bean
