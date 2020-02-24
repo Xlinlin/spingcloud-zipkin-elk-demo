@@ -25,14 +25,25 @@ public class CustomZipkinSpanReporter implements ZipkinSpanReporter, Flushable, 
 {
     private final AsyncReporter<Span> delegate;
     private final Sender sender;
+    private final String HTTP_START = "http:";
+
+    private final Pattern skipPattern;
 
     public CustomZipkinSpanReporter(int flushInterval, SpanMetricReporter spanMetricReporter,
-            CustomSpanSender customSpanSender)
+            CustomSpanSender customSpanSender, String skipPattern)
     {
         CustomSpanSender spanSender = customSpanSender;
         if (null == customSpanSender)
         {
             spanSender = new CustomSpanSenderSlf4jImpl();
+        }
+        if (!StringUtils.isEmpty(skipPattern))
+        {
+            this.skipPattern = Pattern.compile(skipPattern);
+        }
+        else
+        {
+            this.skipPattern = null;
         }
         sender = new CustomSender(spanSender);
         delegate = AsyncReporter.builder(this.sender)
@@ -82,6 +93,17 @@ public class CustomZipkinSpanReporter implements ZipkinSpanReporter, Flushable, 
     @Override
     public void report(Span span)
     {
+        // http:/api/message/heartbeat
+        if (null != skipPattern)
+        {
+            String name = span.name;
+            // 过滤某些特定的api请求
+            String requestApi = name.substring(HTTP_START.length(), name.length());
+            if (skipPattern.matcher(requestApi).matches())
+            {
+                return;
+            }
+        }
         this.delegate.report(span);
     }
 }
